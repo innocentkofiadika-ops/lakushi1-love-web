@@ -1,1 +1,32 @@
 # lakushi1-love-web /src/index.html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LAKUSHI1 LOVE WEB</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:linear-gradient(135deg,#241820,#583044);min-height:100vh;display:grid;place-items:center;padding:24px;color:#30232a}
+.panel{background:#f7f1e8;width:min(100%,600px);padding:40px 30px;border-radius:18px;text-align:center;box-shadow:0 18px 55px #0005}
+h1{color:#64263b}
+.gold{color:#a47b32}
+p{line-height:1.7}
+a{display:inline-block;background:#64263b;color:white;padding:14px 24px;border-radius:8px;text-decoration:none;font-weight:bold;margin:10px 5px}
+a:hover{background:#8a3b55}
+footer{margin-top:28px;color:#75636a;font-size:13px}
+</style>
+</head>
+<body>
+<main class="panel">
+<h1>LAKUSHI1 LOVE WEB</h1>
+<h3 class="gold">Make room for meaningful love.</h3>
+<p>Welcome to a place where meaningful relationships begin. Meet people, build genuine connections, and discover the possibility of lasting love.</p>
+<p>A welcoming community for adults seeking friendship, relationships and marriage.</p>
+<a href="/login.html">Log in</a>
+<a href="/signup.html">Join us</a>
+<footer>© 2026 LAKUSHI1 LOVE WEB. All rights reserved.</footer>
+</main>
+</body>
+</html>
