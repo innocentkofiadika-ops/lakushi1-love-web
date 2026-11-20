@@ -1,1 +1,154 @@
 
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Join LAKUSHI1 LOVE WEB</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 30px 15px;
+      background: #f8f0e9;
+      font-family: Arial, sans-serif;
+      color: #34202a;
+    }
+    .container {
+      max-width: 480px;
+      margin: 25px auto;
+      padding: 30px;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 5px 25px #00000015;
+    }
+    h1 { color: #701c36; text-align: center; }
+    p { text-align: center; line-height: 1.5; }
+    label { display: block; margin-top: 15px; font-weight: bold; }
+    input, select {
+      width: 100%;
+      padding: 13px;
+      margin-top: 7px;
+      border: 1px solid #d8c6c6;
+      border-radius: 7px;
+      font-size: 16px;
+    }
+    button {
+      width: 100%;
+      margin-top: 23px;
+      padding: 14px;
+      border: 0;
+      border-radius: 7px;
+      background: #701c36;
+      color: white;
+      font-size: 17px;
+      cursor: pointer;
+    }
+    button:disabled { opacity: .6; cursor: wait; }
+    #message { margin-top: 18px; font-weight: bold; }
+    a { color: #701c36; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>LAKUSHI1 LOVE WEB</h1>
+    <p>Make room for meaningful love.</p>
+    <p>Create your account and begin your journey towards meaningful relationships.</p>
+
+    <form id="signupForm">
+      <label for="firstName">First name</label>
+      <input id="firstName" type="text" required>
+
+      <label for="lastName">Last name</label>
+      <input id="lastName" type="text" required>
+
+      <label for="email">Email address</label>
+      <input id="email" type="email" required>
+
+      <label for="password">Password</label>
+      <input id="password" type="password" minlength="8" required>
+
+      <label for="country">Country</label>
+      <input id="country" type="text" value="Ghana" required>
+
+      <label for="goal">Relationship goal</label>
+      <select id="goal" required>
+        <option value="">Choose your goal</option>
+        <option value="Marriage">Marriage</option>
+        <option value="Serious relationship">Serious relationship</option>
+        <option value="Friendship">Friendship</option>
+        <option value="Getting to know people">Getting to know people</option>
+      </select>
+
+      <button id="signupButton" type="submit">Create Account</button>
+    </form>
+
+    <p id="message" role="status"></p>
+    <p>Already have an account? <a href="login.html">Log in here</a></p>
+    <p><small>By registering, you confirm that you are 18 years or older.</small></p>
+  </div>
+
+  <script>
+    const SUPABASE_URL = "https://tbqvggbdwtkabkqrytor.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_iIR-m_rhxRS4UqUPjI3LVw_EEByrXcf";
+
+    const client = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
+
+    const form = document.getElementById("signupForm");
+    const message = document.getElementById("message");
+    const button = document.getElementById("signupButton");
+
+    form.addEventListener("submit", async function(event) {
+      event.preventDefault();
+
+      button.disabled = true;
+      button.textContent = "Creating account...";
+      message.textContent = "";
+
+      const firstName = document.getElementById("firstName").value.trim();
+      const lastName = document.getElementById("lastName").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+      const country = document.getElementById("country").value.trim();
+      const goal = document.getElementById("goal").value;
+
+      try {
+        const { data, error } = await client.auth.signUp({
+          email: email,
+          password: password,
+          options: {
+            emailRedirectTo: window.location.origin + "/login.html",
+            data: {
+              first_name: firstName,
+              last_name: lastName,
+              country: country,
+              relationship_goal: goal
+            }
+          }
+        });
+
+        if (error) throw error;
+
+        if (data.session) {
+          message.textContent = "Account created! Taking you to your dashboard...";
+          window.location.href = "dashboard.html";
+        } else {
+          message.textContent =
+            "Registration successful! Please check your email to confirm your account, then log in.";
+          form.reset();
+        }
+      } catch (error) {
+        message.textContent = "Registration error: " + error.message;
+      } finally {
+        button.disabled = false;
+        button.textContent = "Create Account";
+      }
+    });
+  </script>
+</body>
+</html>
