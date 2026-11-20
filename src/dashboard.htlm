@@ -1,0 +1,540 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Member Dashboard | LAKUSHI1 LOVE WEB</title>
+
+<style>
+:root {
+  --wine:#64263b;
+  --wine2:#3b1d2b;
+  --gold:#bd9650;
+  --cream:#f7f1e8;
+  --ink:#30232a;
+  --muted:#786b70;
+  --line:#eadfd5;
+}
+* {box-sizing:border-box}
+body {
+  margin:0;
+  background:#f4eee7;
+  color:var(--ink);
+  font:15px Arial,sans-serif;
+}
+.top {
+  background:var(--wine2);
+  color:white;
+  padding:18px 5%;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+}
+.brand {font:20px Georgia}
+.brand span {color:#e4c17e}
+.wrap {
+  max-width:1120px;
+  margin:28px auto;
+  padding:0 20px;
+}
+.welcome {
+  background:linear-gradient(115deg,#54263a,#7b3b50);
+  color:white;
+  padding:30px;
+  border-radius:18px;
+}
+.welcome h1 {
+  font:32px Georgia;
+  margin:0 0 8px;
+}
+.welcome p {margin:0;color:#f1e5e5}
+.grid {
+  display:grid;
+  grid-template-columns:1.1fr 2fr;
+  gap:20px;
+  margin-top:20px;
+}
+.card {
+  background:white;
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:22px;
+}
+.card h2 {
+  font:22px Georgia;
+  color:var(--wine);
+  margin:0 0 14px;
+}
+.muted {color:var(--muted);line-height:1.55}
+.profilehead {
+  display:flex;
+  align-items:center;
+  gap:14px;
+  margin-bottom:16px;
+}
+.avatar {
+  width:65px;
+  height:65px;
+  border-radius:50%;
+  background:#efe1d5;
+  color:var(--wine);
+  display:grid;
+  place-items:center;
+  font:24px Georgia;
+  overflow:hidden;
+}
+.avatar img {
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+.field {margin:12px 0}
+.field label {
+  display:block;
+  font-size:13px;
+  font-weight:bold;
+  margin-bottom:6px;
+}
+.field input,.field select,.field textarea {
+  width:100%;
+  padding:12px;
+  border:1px solid #d9cbc3;
+  border-radius:9px;
+  font-size:15px;
+  font-family:Arial;
+}
+.field textarea {
+  min-height:100px;
+  resize:vertical;
+}
+.btn {
+  border:0;
+  border-radius:9px;
+  background:var(--wine);
+  color:white;
+  padding:12px 17px;
+  font-weight:bold;
+  cursor:pointer;
+}
+.btn.secondary {
+  background:#efe5dc;
+  color:var(--wine);
+}
+.btn:disabled {opacity:.6;cursor:wait}
+.features {
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:13px;
+}
+.feature {
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:17px;
+}
+.feature .ico {font-size:24px}
+.feature h3 {
+  margin:9px 0 6px;
+  color:var(--wine);
+  font-size:17px;
+}
+.tag {
+  display:inline-block;
+  background:#f3eadb;
+  color:#795a25;
+  padding:5px 9px;
+  border-radius:20px;
+  font-size:11px;
+  font-weight:bold;
+}
+.notice {
+  background:#faf5ec;
+  border:1px solid #ead9b7;
+  border-radius:12px;
+  padding:14px;
+  color:#65502c;
+  line-height:1.5;
+  margin-top:16px;
+}
+.progress {
+  height:9px;
+  background:#eee5df;
+  border-radius:20px;
+  overflow:hidden;
+  margin:10px 0;
+}
+.progress span {
+  display:block;
+  height:100%;
+  width:0;
+  background:var(--gold);
+  transition:width .2s;
+}
+#msg {
+  min-height:20px;
+  color:var(--wine);
+  font-size:13px;
+  line-height:1.5;
+}
+footer {
+  text-align:center;
+  color:#897b80;
+  padding:30px;
+  font-size:12px;
+}
+@media(max-width:760px) {
+  .grid,.features {grid-template-columns:1fr}
+  .welcome h1 {font-size:27px}
+  .top {padding:16px 20px}
+}
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const client = window.supabase.createClient(
+  "https://tbqvggbdwtkabkqrytor.supabase.co",
+  "sb_publishable_iIR-m_rhxRS4UqUPjI3LVw_EEByrXcf"
+);
+</script>
+</head>
+
+<body>
+
+<header class="top">
+  <div class="brand">LAKUSHI1 <span>LOVE WEB</span></div>
+  <small>A space for meaningful connections</small>
+  <button class="btn secondary" id="logout">Log out</button>
+</header>
+
+<main class="wrap">
+
+<section class="welcome">
+  <h1 id="hello">Welcome</h1>
+  <p>Your journey towards meaningful connection starts here.</p>
+</section>
+
+<div class="grid">
+
+<section class="card">
+  <h2>Your profile</h2>
+
+  <div class="profilehead">
+    <div class="avatar" id="avatar">♥</div>
+    <div>
+      <strong id="displayname">Member</strong>
+      <div class="muted" id="email"></div>
+    </div>
+  </div>
+
+  <strong>Profile completion: <span id="percent">0%</span></strong>
+  <div class="progress">
+    <span id="progressbar"></span>
+  </div>
+  <p class="muted" id="completionText">Complete your profile to introduce yourself.</p>
+
+  <form id="profile">
+
+    <div class="field">
+      <label for="first">First name</label>
+      <input id="first" maxlength="60" required>
+    </div>
+
+    <div class="field">
+      <label for="last">Last name</label>
+      <input id="last" maxlength="60" required>
+    </div>
+
+    <div class="field">
+      <label for="country">Country</label>
+      <input id="country" maxlength="80" required>
+    </div>
+
+    <div class="field">
+      <label for="goal">Relationship goal</label>
+      <select id="goal" required>
+        <option value="">Choose your relationship goal</option>
+        <option>Marriage</option>
+        <option>Long-term relationship</option>
+        <option>Meaningful dating</option>
+        <option>Friendship first</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="bio">About me / Biography</label>
+      <textarea id="bio" maxlength="1000"
+        placeholder="Tell other members a little about yourself..."></textarea>
+    </div>
+
+    <div class="field">
+      <label for="interests">My interests</label>
+      <input id="interests" maxlength="500"
+        placeholder="e.g. Reading, music, travelling, cooking">
+      <small class="muted">Separate each interest with a comma.</small>
+    </div>
+
+    <div class="field">
+      <label for="photo">Profile photo URL</label>
+      <input id="photo" type="url"
+        placeholder="Paste a link to your photo">
+    </div>
+
+    <button type="button" class="btn secondary" id="preview">
+      Preview photo
+    </button>
+
+    <div style="margin-top:12px">
+      <button class="btn" id="save" type="submit">
+        Save my profile
+      </button>
+    </div>
+
+    <p id="msg" role="status"></p>
+  </form>
+</section>
+
+<section class="card">
+  <h2>Your relationship space</h2>
+  <p class="muted">
+    A thoughtful place to meet people, build trust and explore meaningful relationships.
+  </p>
+
+  <div class="features">
+
+    <div class="feature">
+      <div class="ico">♡</div>
+      <h3>Discover people</h3>
+      <p class="muted">Explore members who may share your values and relationship goals.</p>
+      <span class="tag">NEXT STAGE</span>
+    </div>
+
+    <div class="feature">
+      <div class="ico">✉</div>
+      <h3>Messages</h3>
+      <p class="muted">A private space for conversations with your connections.</p>
+      <span class="tag">NEXT STAGE</span>
+    </div>
+
+    <div class="feature">
+      <div class="ico">✧</div>
+      <h3>Connections</h3>
+      <p class="muted">Keep track of people you connect with and requests you receive.</p>
+      <span class="tag">NEXT STAGE</span>
+    </div>
+
+    <div class="feature">
+      <div class="ico">♡</div>
+      <h3>Relationship guidance</h3>
+      <p class="muted">Practical ideas for healthy dating, communication and lasting love.</p>
+      <span class="tag">NEXT STAGE</span>
+    </div>
+
+  </div>
+
+  <div class="notice">
+    <strong>Welcome aboard.</strong>
+    Complete your profile so we can prepare the next features.
+    Discovery and messaging will be connected in a later stage.
+  </div>
+</section>
+
+</div>
+</main>
+
+<footer>
+LAKUSHI1 LOVE WEB · Meaningful relationships begin with genuine connection.
+</footer>
+
+<script>
+(async function() {
+
+  const $ = id => document.getElementById(id);
+  const msg = $("msg");
+  const saveButton = $("save");
+
+  function showPhoto(url) {
+    const avatar = $("avatar");
+    avatar.innerHTML = "";
+
+    if (!url) {
+      avatar.textContent = "♥";
+      return;
+    }
+
+    const img = document.createElement("img");
+    img.alt = "Profile photo";
+    img.src = url;
+    img.onerror = () => {
+      avatar.innerHTML = "";
+      avatar.textContent = "♥";
+    };
+    avatar.appendChild(img);
+  }
+
+  function updateCompletion() {
+    const fields = [
+      $("first").value.trim(),
+      $("last").value.trim(),
+      $("country").value.trim(),
+      $("goal").value.trim(),
+      $("bio").value.trim(),
+      $("interests").value.trim(),
+      $("photo").value.trim()
+    ];
+
+    const completed = fields.filter(Boolean).length;
+    const percentage = Math.round(completed / fields.length * 100);
+
+    $("percent").textContent = percentage + "%";
+    $("progressbar").style.width = percentage + "%";
+    $("completionText").textContent =
+      percentage === 100
+        ? "Your profile is complete. Well done!"
+        : "You have completed " + completed + " of 7 profile sections.";
+  }
+
+  const { data, error: authError } = await client.auth.getUser();
+
+  if (authError || !data.user) {
+    location.replace("/login.html");
+    return;
+  }
+
+  const user = data.user;
+  const meta = user.user_metadata || {};
+
+  $("email").textContent = user.email || "";
+
+  $("first").value = meta.first_name || "";
+  $("last").value = meta.last_name || "";
+  $("country").value = meta.country || "";
+  $("goal").value = meta.relationship_goal || "";
+
+  $("hello").textContent = "Welcome" +
+    (meta.first_name ? " back, " + meta.first_name : "") + ".";
+
+  // Load the member's existing profile from the profiles table.
+  msg.textContent = "Loading your profile...";
+
+  const { data: profile, error: loadError } = await client
+    .from("profiles")
+    .select("id,first_name,last_name,country,relationship_goal,bio,interests,photo_url")
+    .eq("id", user.id)
+    .maybeSingle();
+
+  if (loadError) {
+    msg.textContent = "Could not load profile: " + loadError.message;
+  } else if (profile) {
+    $("first").value = profile.first_name || "";
+    $("last").value = profile.last_name || "";
+    $("country").value = profile.country || "";
+    $("goal").value = profile.relationship_goal || "";
+    $("bio").value = profile.bio || "";
+    $("interests").value = Array.isArray(profile.interests)
+      ? profile.interests.join(", ")
+      : "";
+    $("photo").value = profile.photo_url || "";
+
+    showPhoto(profile.photo_url);
+    msg.textContent = "Your saved profile has been loaded.";
+  } else {
+    msg.textContent = "Welcome! Complete your profile and save it.";
+  }
+
+  function updateName() {
+    const first = $("first").value.trim();
+    const last = $("last").value.trim();
+
+    $("displayname").textContent =
+      (first + " " + last).trim() || "Your member profile";
+
+    $("hello").textContent =
+      "Welcome" + (first ? " back, " + first : "") + ".";
+  }
+
+  ["first","last","country","goal","bio","interests","photo"]
+    .forEach(id => {
+      $(id).addEventListener("input", updateCompletion);
+      $(id).addEventListener("change", updateCompletion);
+    });
+
+  $("first").addEventListener("input", updateName);
+  $("last").addEventListener("input", updateName);
+
+  $("preview").onclick = () => {
+    const url = $("photo").value.trim();
+
+    if (!url) {
+      msg.textContent = "Please enter a photo URL first.";
+      return;
+    }
+
+    showPhoto(url);
+    msg.textContent = "Photo preview updated.";
+  };
+
+  updateName();
+  updateCompletion();
+
+  // Save profile directly to public.profiles.
+  $("profile").onsubmit = async event => {
+    event.preventDefault();
+
+    saveButton.disabled = true;
+    msg.textContent = "Saving your profile...";
+
+    try {
+      const interests = $("interests").value
+        .split(",")
+        .map(item => item.trim())
+        .filter(Boolean);
+
+      const payload = {
+        id: user.id,
+        first_name: $("first").value.trim(),
+        last_name: $("last").value.trim(),
+        country: $("country").value.trim(),
+        relationship_goal: $("goal").value,
+        bio: $("bio").value.trim(),
+        interests: interests,
+        photo_url: $("photo").value.trim() || null,
+        updated_at: new Date().toISOString()
+      };
+
+      const { error: saveError } = await client
+        .from("profiles")
+        .upsert(payload, { onConflict: "id" });
+
+      if (saveError) throw saveError;
+
+      updateName();
+      showPhoto(payload.photo_url);
+      updateCompletion();
+
+      msg.textContent = "Success! Your profile has been saved.";
+    } catch (error) {
+      msg.textContent = "Could not save your profile: " +
+        (error.message || "Please try again.");
+    } finally {
+      saveButton.disabled = false;
+    }
+  };
+
+  $("logout").onclick = async () => {
+    const { error } = await client.auth.signOut();
+
+    if (error) {
+      msg.textContent = "Unable to log out: " + error.message;
+      return;
+    }
+
+    location.href = "/login.html";
+  };
+
+})();
+</script>
+
+</body>
+</html>
